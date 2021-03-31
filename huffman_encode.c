@@ -93,7 +93,7 @@ int main(int argc, char** argv) {
     heap* h = heap_create();
     for (int i = 0; i < 256; i++) {
         if(freq[i]) {
-            node *n = create_node((unsigned char)i, freq[i], true);
+            node *n = create_node((unsigned char)i, freq[i]);
             heap_insert(&h, n);
         }
     }

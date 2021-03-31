@@ -15,7 +15,6 @@ struct Node{
     int id;
     unsigned char unch;
 	int freq;
-    bool is_leaf;
     struct Node *left, *right;
 };
 
@@ -33,6 +32,6 @@ struct Node *heap_pull(heap *h);
 
 void print_heap(heap* h);
 
-struct Node *create_node(unsigned char unch, int freq, bool is_leaf);
+struct Node *create_node(unsigned char unch, int freq);
 void trace_node_tree_gen_codes(node* n, char *code, char **codes_list);
 node* create_huffman_tree(heap* h);

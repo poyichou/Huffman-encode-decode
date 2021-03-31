@@ -135,13 +135,12 @@ void print_heap(heap* h) {
 	}
 }
 
-struct Node *create_node(unsigned char unch, int freq, bool is_leaf) {
+struct Node *create_node(unsigned char unch, int freq) {
 	static int idx = 0;
 	struct Node* node = malloc(sizeof(struct Node));
     node->id = idx;
 	node->unch = unch;
 	node->freq = freq;
-	node->is_leaf = is_leaf;
     node->left = NULL;
     node->right = NULL;
     idx++;
@@ -171,7 +170,7 @@ node* create_huffman_tree(heap* h) {
         } else if (!right) {
             right = n;
 
-            node *parent = create_node(0, left->freq + right->freq, false);
+            node *parent = create_node(0, left->freq + right->freq);
             parent->left = left;
             parent->right = right;
             heap_insert(&h, parent);

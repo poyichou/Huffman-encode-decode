@@ -20,7 +20,7 @@ heap* file_to_heap(FILE* fp) {
         }
         freq[i] = *((int*)(&temp[0]));
         if(freq[i]) {
-            node *n = create_node((unsigned char)i, freq[i], true);
+            node *n = create_node((unsigned char)i, freq[i]);
             heap_insert(&h, n);
         }
     }
