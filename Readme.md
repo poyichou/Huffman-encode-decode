@@ -2,6 +2,7 @@
 ## To run
 ```
 make
+[cp <target file path> .]
 [./huffman_encode|./huffman_decode] <target file>
 ```
 ## Description
