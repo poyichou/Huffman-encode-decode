@@ -37,9 +37,9 @@ void dump_from_huffman_code(FILE* in_fp, char* out_filename, int huff_size_bits)
     char rb;
     node *trace_p = root;
     char bit;
-    for (int i = 0; i < (huff_size_bits + huff_pad_bits) / 8; i++) {
+    while(1) {
         rb = fgetc(in_fp);
-        for (int j = 0; j < 8 && i * 8 + j < huff_size_bits ; j++){
+        for (int j = 0; j < 8; j++){
             bit = rb & (1 << (7 - j));
             if (bit) {
                 trace_p = trace_p->left;
@@ -47,6 +47,10 @@ void dump_from_huffman_code(FILE* in_fp, char* out_filename, int huff_size_bits)
                 trace_p = trace_p->right;
             }
             if (trace_p->left == NULL || trace_p->right == NULL) { // leaf
+                if (freq[trace_p->unch] <= 0) {
+                    return;
+                }
+                freq[trace_p->unch]--;
                 fputc(trace_p->unch, dec_fp);
                 trace_p = root;
             }
@@ -78,5 +82,6 @@ int main(int argc, char **argv) {
     char dec_filename[strlen(".dec") + strlen(filename) + 1];
     snprintf(dec_filename, sizeof(dec_filename), "%s.dec", filename);
     dump_from_huffman_code(fp, dec_filename, huff_size_bits);
+    fclose(fp);
     return 0;
 }

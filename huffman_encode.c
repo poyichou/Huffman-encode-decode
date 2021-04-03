@@ -104,5 +104,6 @@ int main(int argc, char** argv) {
     char huff_filename[strlen(".huffman") + strlen(filename) + 1];
     snprintf(huff_filename, sizeof(huff_filename), "%s.huffman", filename);
     dump_huffman_code(fp, huff_filename);
+    fclose(fp);
     return 0;
 }
