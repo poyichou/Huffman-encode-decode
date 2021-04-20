@@ -1,18 +1,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/stat.h>
 #include "heap.h"
+#include "huffman_coding.h"
 /*
  * Huffman encoded file format:
- *   | freq (4 bytes * 256) | huff_size_bits (4 bytes) | huffman codes (variable) |
+ *   | freq (4 bytes * 256) | huffman codes (variable) |
  * */
 
-static int freq[256] = {0};
 static char *codes[256] = {0};
 static node* root = NULL;
 
-void dump_huffman_code(FILE* in_fp, char* out_filename) {
-    printf("Dump to %s\n", out_filename);
+void dump_huffman_code(FILE* in_fp, char* out_filename, int freq[]) {
+    /* printf("Dump to %s\n", out_filename); */
     FILE* huff_fp = fopen(out_filename, "wb");
     // write table
     for (int i = 0; i < 256; i++) {
@@ -35,10 +37,6 @@ void dump_huffman_code(FILE* in_fp, char* out_filename) {
     int huff_pad_bits = huff_size_bits % 8;
     if (huff_pad_bits) {
         huff_pad_bits = 8 - huff_pad_bits;
-    }
-    // write size indicator
-    for (int i = 0; i < sizeof(int); i++) {
-        fputc(*(((char*)(&huff_size_bits)) + i), huff_fp);
     }
 
     // write codes
@@ -69,14 +67,16 @@ void dump_huffman_code(FILE* in_fp, char* out_filename) {
         j = (bit_count + 1) < huff_size_bits ? j + 1 : 0;
     }
     free(temp_code);
+    fclose(huff_fp);
 }
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     if (argc != 2) {
-        printf("Usage: %s <target_file>\n", __FILE__);
+        printf("Usage: %s <target_file>\n", argv[0]);
         exit(1);
     }
     char *filename = argv[1];
+    int freq[256] = {0};
     FILE *fp = fopen(filename, "rb");
     char ch;
     unsigned char unch;
@@ -103,7 +103,12 @@ int main(int argc, char** argv) {
 
     char huff_filename[strlen(".huffman") + strlen(filename) + 1];
     snprintf(huff_filename, sizeof(huff_filename), "%s.huffman", filename);
-    dump_huffman_code(fp, huff_filename);
+    dump_huffman_code(fp, huff_filename, freq);
     fclose(fp);
+
+    struct stat st;
+    stat(filename, &st);
+    chmod(huff_filename, st.st_mode);
+    rename(huff_filename, filename);
     return 0;
 }

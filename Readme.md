@@ -14,5 +14,5 @@ Some parts of `huffman_encode` and `huffman_decode` are conceptually similar
 - The procedure above eventually generate a huffman tree based on the occurrences of bytes rooted as `root`.  
 - When tracing the huffman tree, append `1` for left child, `0` for right child until leaf is reached.  
 ### Running result
-`huffman_encode` encode the content of `<target file>` then store table and encoded content in `<target file>.huffman`  
-`huffman_encode` parse table and decode the following content in `<target file>` then store decoded content in `<target file>.dec`  
+`huffman_encode` encode the content of `<target file>` then store table and encoded content in `<target file>`(replace)  
+`huffman_encode` parse table and decode the following content in `<target file>` then store decoded content in `<target file>`(replace)  
