@@ -4,7 +4,6 @@
 #include <unistd.h>
 #include <sys/stat.h>
 #include "heap.h"
-#include "huffman_coding.h"
 /*
  * Huffman encoded file format:
  *   | freq (4 bytes * 256) | huffman codes (variable) |
